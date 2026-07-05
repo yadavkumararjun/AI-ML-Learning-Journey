@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 df = pd.read_csv("../../datasets/employee/employee.csv")
 
-head_data = df.head(10)
-tail_data = df.tail()
-info_data = df.info()
+
+# info_data = df.info()
 describe_data = df.describe()
 missing_values = df.isnull().sum()
 
@@ -15,6 +15,8 @@ total_emp = len(df)
 total_dept = df["Department"].nunique()
 dept_list = df["Department"].unique()
 city_list = df["City"].unique()
+
+employee_salary = df[["Name", "Salary"]]
 
 avg_salary = df["Salary"].mean()
 max_salary = df["Salary"].max()
@@ -89,4 +91,129 @@ df["Age Group"] = pd.cut(
 )
 
 final_dataframe = df
-print(final_dataframe)
+# print(final_dataframe)
+plt.figure(figsize=(9,6))
+
+plt.bar(
+    dept_avg_salary.index,
+    dept_avg_salary.values,
+    color="royalblue"
+)
+
+plt.title("Average Salary by Department", fontsize=18, fontweight="bold")
+plt.xlabel("Department", fontsize=13)
+plt.ylabel("Average Salary (₹)", fontsize=13)
+plt.xticks(fontsize=11)
+plt.yticks(fontsize=11)
+plt.grid(axis="y", linestyle="--", alpha=0.4)
+plt.tight_layout()
+plt.savefig("charts/average_salary_department.png", dpi=300)
+plt.show()
+
+
+explode = [0.1, 0, 0, 0, 0] 
+
+plt.figure(figsize=(8,8))
+
+plt.pie(
+    dept_employee_count.values,
+    labels=dept_employee_count.index,
+    explode=explode,
+    autopct="%1.1f%%",
+    startangle=90,
+    shadow=True,
+    textprops={"fontsize":12}
+)
+
+plt.title("Employee Distribution by Department", fontsize=18, fontweight="bold")
+plt.tight_layout()
+plt.savefig("charts/employee_distribution.png", dpi=300)
+plt.show()
+
+
+plt.figure(figsize=(9,6))
+
+plt.hist(
+    employee_salary["Salary"],
+    bins=10,
+    color="mediumseagreen",
+    edgecolor="black"
+)
+
+plt.title("Salary Distribution", fontsize=18, fontweight="bold")
+plt.xlabel("Salary (₹)", fontsize=13)
+plt.ylabel("Number of Employees", fontsize=13)
+plt.xticks(fontsize=11)
+plt.yticks(fontsize=11)
+plt.grid(alpha=0.4)
+plt.tight_layout()
+plt.savefig("charts/salary_distribution.png", dpi=300)
+plt.show()
+
+
+plt.figure(figsize=(9,6))
+
+plt.scatter(
+    df["Experience"],
+    df["Salary"],
+    color="crimson",
+    s=80
+)
+
+plt.title("Experience vs Salary", fontsize=18, fontweight="bold")
+plt.xlabel("Experience (Years)", fontsize=13)
+plt.ylabel("Salary (₹)", fontsize=13)
+plt.xticks(fontsize=11)
+plt.yticks(fontsize=11)
+plt.grid(alpha=0.4)
+plt.tight_layout()
+plt.savefig("charts/experience_vs_salary.png", dpi=300)
+plt.show()
+
+
+employee_salary = employee_salary.sort_values("Salary")
+
+plt.figure(figsize=(13,6))
+
+plt.plot(
+    employee_salary["Name"],
+    employee_salary["Salary"],
+    marker="o",
+    linewidth=2.5,
+    color="darkorange"
+)
+
+plt.title("Salary of Each Employee", fontsize=18, fontweight="bold")
+plt.xlabel("Employee Name", fontsize=13)
+plt.ylabel("Salary (₹)", fontsize=13)
+plt.xticks(rotation=45, fontsize=10)
+plt.yticks(fontsize=11)
+plt.grid(alpha=0.4)
+plt.tight_layout()
+plt.savefig("charts/salary_line_chart.png", dpi=300)
+plt.show()
+
+plt.figure(figsize=(9,6))
+
+plt.plot(
+    dept_avg_experience.index,
+    dept_avg_experience.values,
+    marker="o",
+    linewidth=2.5,
+    color="purple"
+)
+
+plt.title("Average Experience by Department", fontsize=18, fontweight="bold")
+plt.xlabel("Department", fontsize=13)
+plt.ylabel("Average Experience (Years)", fontsize=13)
+
+plt.xticks(fontsize=11)
+plt.yticks(fontsize=11)
+
+plt.grid(alpha=0.4)
+
+plt.tight_layout()
+
+plt.savefig("charts/average_experience_department.png", dpi=300)
+
+plt.show()
