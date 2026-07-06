@@ -43,7 +43,16 @@ cust_low_spend = df.groupby(["CustomerName" ,"City" ])["TotalAmount"].sum().idxm
 top_ten_cust = df.groupby(["CustomerName" ,"City" ])["TotalAmount"].sum().sort_values(ascending=False).head(10)
 avg_spend_per_cust =df.groupby(["CustomerName" ,"City" ])["TotalAmount"].mean().round(2).sort_values(ascending=False)
 total_order_per_cust =df.groupby(["CustomerName" ,'City'])["OrderID"].nunique().sort_values(ascending=False)
-print(total_order_per_cust)
+
+# City analysis 
+rev_by_city = df.groupby("City")["TotalAmount"].sum()
+total_order = df.groupby("City")["OrderID"].count()
+avg_order_by_city = rev_by_city /total_order
+# print(total_order)
+
+#sales person Analysis
+total_sales_by_slperson = df.groupby('Salesperson')["TotalAmount"].sum()
+print(total_sales_by_slperson)
 
 
 
