@@ -52,7 +52,13 @@ avg_order_by_city = rev_by_city /total_order
 
 #sales person Analysis
 total_sales_by_slperson = df.groupby('Salesperson')["TotalAmount"].sum()
-print(total_sales_by_slperson)
+rev_by_sales_person = df.groupby('Salesperson')["TotalAmount"].sum().sum()
+
+# print(rev_by_sales_person)
+
+# Payment Analysis 
+most_used_pymtd =df['PaymentMethod'].mode()[0]
+print(most_used_pymtd)
 
 
 
