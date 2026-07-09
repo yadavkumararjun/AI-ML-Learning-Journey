@@ -57,8 +57,9 @@ rev_by_sales_person = df.groupby('Salesperson')["TotalAmount"].sum().sum()
 # print(rev_by_sales_person)
 
 # Payment Analysis 
-most_used_pymtd =df['PaymentMethod'].mode()[0]
-print(most_used_pymtd)
+most_used_pymtd =df['PaymentMethod'].value_counts().idxmax()
+least_used_pymtd =df['PaymentMethod'].value_counts().idxmin()
+print(least_used_pymtd)
 
 
 
