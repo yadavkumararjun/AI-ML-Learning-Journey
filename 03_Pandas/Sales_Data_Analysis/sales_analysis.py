@@ -1,5 +1,6 @@
 import pandas as pd 
-
+import numpy as np
+import matplotlib.pyplot as plt
 df = pd.read_csv("../../datasets/sales_data/sales_data.csv")
 
 # Data Exploration
@@ -14,7 +15,6 @@ df = pd.read_csv("../../datasets/sales_data/sales_data.csv")
 # print(df.duplicated())
 df = df.drop_duplicates()
 df=df.reset_index(drop=True)
-df['OrderDate']=pd.to_datetime(df['OrderDate'])
 
 # Basic Analysis
 total_order = df.shape[0]
@@ -59,12 +59,35 @@ rev_by_sales_person = df.groupby('Salesperson')["TotalAmount"].sum().sum()
 # Payment Analysis 
 most_used_pymtd =df['PaymentMethod'].value_counts().idxmax()
 least_used_pymtd =df['PaymentMethod'].value_counts().idxmin()
-print(least_used_pymtd)
+# print(least_used_pymtd)
 
 
+# Data Analysis -part 1
+df['OrderDate']=pd.to_datetime(df['OrderDate'])
+df['Month']=df['OrderDate'].dt.month
+df['Year']=df['OrderDate'].dt.year
+df['Day']=df['OrderDate'].dt.day
+df['DayName']=df['OrderDate'].dt.day_name()
+df['Weekday'] = df['OrderDate'].dt.weekday
+monthly_revenue = df.groupby(['Year', 'Month'])['TotalAmount'].sum().reset_index()
+daily_revenue = df.groupby('OrderDate')['TotalAmount'].sum().reset_index()
+monthly_orders = df.groupby(['Year', 'Month'])['OrderID'].count().reset_index(name='OrderCount')
+daily_orders = df.groupby('OrderDate')['OrderID'].count().reset_index(name='OrderCount')
+# print(daily_revenue)
 
+df["Large Order"] = np.where(df['TotalAmount']>=5000 ,"Yes" , "No")
 
+conditions = [
+    df['Discount']==0 ,
+    (df['Discount']>=1)&(df['Discount']>=5),
+    (df['Discount']>=6)&(df['Discount']>=10),
+    (df['Discount']>=11)&(df['Discount']>=15),
+]
+categories =['No Discount' , 'Low' , 'Medium' , "High"]
+df['Discount Category'] = np.select(conditions ,categories , default ='Unknown')
 
-
-
+df['Profit']=df["TotalAmount"]*0.25
+df['Tax']=df["TotalAmount"]*0.18
+df['Net Revenue']=df['TotalAmount']-df['Tax']
+print(df[['TotalAmount', 'Profit', 'Tax', 'Net Revenue']])
 # print(df.to_string())
