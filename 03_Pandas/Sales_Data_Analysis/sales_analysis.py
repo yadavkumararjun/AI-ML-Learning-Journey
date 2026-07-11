@@ -35,6 +35,10 @@ high_rev_prod = df.groupby('Product')["TotalAmount"].sum().idxmax()
 low_rev_prod = df.groupby('Product')["TotalAmount"].sum().idxmin()
 avg_rev_by_prod = df.groupby('Product')["TotalAmount"].mean()
 qty_by_category =df.groupby("Category")['Quantity'].sum().sort_values(ascending=False)
+category_revenue = df.groupby('Category')['TotalAmount'].sum().reset_index()
+
+# Sort the results by revenue in descending order for better analysis
+category_revenue = category_revenue.sort_values(by='TotalAmount', ascending=False)
 
 # Customer Analysis
 
@@ -79,9 +83,9 @@ df["Large Order"] = np.where(df['TotalAmount']>=5000 ,"Yes" , "No")
 
 conditions = [
     df['Discount']==0 ,
-    (df['Discount']>=1)&(df['Discount']>=5),
-    (df['Discount']>=6)&(df['Discount']>=10),
-    (df['Discount']>=11)&(df['Discount']>=15),
+    (df['Discount']>=1)&(df['Discount']<=5),
+    (df['Discount']>=6)&(df['Discount']<=10),
+    (df['Discount']>=11)&(df['Discount']<=15),
 ]
 categories =['No Discount' , 'Low' , 'Medium' , "High"]
 df['Discount Category'] = np.select(conditions ,categories , default ='Unknown')
@@ -91,3 +95,6 @@ df['Tax']=df["TotalAmount"]*0.18
 df['Net Revenue']=df['TotalAmount']-df['Tax']
 print(df[['TotalAmount', 'Profit', 'Tax', 'Net Revenue']])
 # print(df.to_string())
+
+
+# Visualizations using Matplotlib 
