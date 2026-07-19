@@ -24,7 +24,7 @@ high_order_amt = df['TotalAmount'].max()
 low_order_amt = df['TotalAmount'].min()
 avg_discount =df['Discount'].mean()
 total_qnt = df['Quantity'].sum()
-total_cust = df['CustomerName'].count()
+total_cust = df['CustomerName'].nunique()
 total_city = df["City"].nunique()
 total_categories = df['Category'].nunique()
 
@@ -50,7 +50,7 @@ total_order_per_cust =df.groupby(["CustomerName" ,'City'])["OrderID"].nunique().
 
 # City analysis 
 rev_by_city = df.groupby("City")["TotalAmount"].sum()
-total_order = df.groupby("City")["OrderID"].count()
+order_by_city = df.groupby("City")["OrderID"].count()
 avg_order_by_city = rev_by_city /total_order
 # print(total_order)
 
